@@ -1,8 +1,6 @@
-import { AsyncPageGenerator, asyncPageGenerator } from './async-page-generator';
-import { PaginationFunction } from './pagination-function';
-import { PageIterator } from './page-iterator';
-import { Observable } from 'rxjs';
-import { PaginationAction, makeActionCreators } from './store/actions';
+import { PageIterator } from '../iterator/page-iterator';
+import { PaginationFunction } from '../iterator/pagination-function';
+import { makeActionCreators, PaginationAction } from '../store/actions';
 
 // assumes paginator reducer is plugged in
 
@@ -13,7 +11,7 @@ import { PaginationAction, makeActionCreators } from './store/actions';
  * 1. `dispatch` dispatches an action to the store
  * 2. TODO this library's reducer has been installed
  */
-export class ReduxLikePaginationContext<Entity> {
+export class StorePaginationContext<Entity> {
   private pageIterator: PageIterator<Entity>;
   private actionCreators: ReturnType<typeof makeActionCreators>;
 
@@ -39,7 +37,9 @@ export class ReduxLikePaginationContext<Entity> {
     this.dispatch(this.actionCreators.GetNextPage());
     const page = await this.pageIterator.getNextPage();
     this.onReceivePage(page);
-    this.actionCreators.GetNextPageSuccess(page.map((e: any) => e.id)); // TODO type
+    this.dispatch(
+      this.actionCreators.GetNextPageSuccess(page.map((e: any) => e.id)),
+    ); // TODO type
     return page;
   }
 

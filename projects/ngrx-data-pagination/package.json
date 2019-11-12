@@ -11,5 +11,8 @@
   },
   "dependencies": {
     "@ngrx/data": "^8.4.0"
+  },
+  "devDependencies": {
+    "redux": "^4.0.4"
   }
 }

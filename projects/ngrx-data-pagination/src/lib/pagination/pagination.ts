@@ -1,8 +1,8 @@
 import { EntityCollectionServiceBase } from '@ngrx/data';
 import { BehaviorSubject, from } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { PageIterator } from './page-iterator';
-import { PaginationFunction } from './pagination-function';
+import { PageIterator } from './iterator/page-iterator';
+import { PaginationFunction } from './iterator/pagination-function';
 
 export class PaginationContext<Entity, PaginationState> {
   private pageIterator: PageIterator<Entity>;

@@ -1,8 +1,8 @@
-import { AsyncPageGenerator, asyncPageGenerator } from './async-page-generator';
+import { asyncPageGenerator } from './async-page-generator';
 import { PaginationFunction } from './pagination-function';
 
 export class PageIterator<Entity> {
-  private asyncPageGenerator: AsyncPageGenerator<Entity>;
+  private asyncPageGenerator: any; //  AsyncPageGenerator<Entity>;
   private done = false;
   private pending = false;
 
