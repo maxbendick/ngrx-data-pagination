@@ -3,7 +3,7 @@ import { waitMs } from '../../../test-utils';
 import { PaginationFunction } from '../iterator/pagination-function';
 import { PaginationState } from '../store/state';
 import { StorePaginationContext } from './store-pagination-context';
-import { EntityMap } from '../entity-id';
+import { EntityMap } from '../entity';
 import { ResetPaginationState, GetNextPage, GetNextPageSuccess } from '../store/actions';
 
 interface TestEntity {
@@ -77,11 +77,11 @@ describe('StorePaginationContext', () => {
       expect(page3).toEqual([0, 1, 2].map(testEntity));
     });
 
-    it('dispatches', async () => {
+    it('dispatches to go to forward', async () => {
       const resetAction = new ResetPaginationState(contextId);
       const getNextPageAction = new GetNextPage(contextId);
-      const getNextPageSuccessAction1 = new GetNextPageSuccess(contextId, [0]);
-      const getNextPageSuccessAction2 = new GetNextPageSuccess(contextId, [0, 1]);
+      const getNextPageSuccessAction1 = new GetNextPageSuccess(contextId, [0], false);
+      const getNextPageSuccessAction2 = new GetNextPageSuccess(contextId, [0, 1], false);
 
       expect(dispatched).toEqual([resetAction]);
 

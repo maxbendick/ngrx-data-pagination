@@ -1,4 +1,4 @@
-import { EntityId } from '../entity-id';
+import { EntityId } from '../entity';
 
 export interface PaginationContextState {
   // storing entity ids instead of enities allows the programmer
@@ -6,6 +6,7 @@ export interface PaginationContextState {
   pages: EntityId[][];
   fetchingNextPage: boolean;
   currentPage: number;
+  done: boolean;
 }
 
 export interface PaginationState {
@@ -16,6 +17,7 @@ export const defaultPaginationContextState: PaginationContextState = {
   pages: [],
   fetchingNextPage: false,
   currentPage: 0,
+  done: false,
 };
 
 export const defaultPaginationState: PaginationState = { contexts: {} };

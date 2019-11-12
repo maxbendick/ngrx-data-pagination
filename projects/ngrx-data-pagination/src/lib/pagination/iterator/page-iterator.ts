@@ -3,7 +3,7 @@ import { PaginationFunction } from './pagination-function';
 
 export class PageIterator<Entity> {
   private asyncPageGenerator: any; //  AsyncPageGenerator<Entity>;
-  private done = false;
+  public done = false;
   private pending = false;
 
   constructor(paginationFunction: PaginationFunction<Entity, any>) {

@@ -1,4 +1,4 @@
-import { EntityId } from '../entity-id';
+import { EntityId } from '../entity';
 import { PaginationContextState } from './state';
 
 export const selectCurrentPageIds = ({

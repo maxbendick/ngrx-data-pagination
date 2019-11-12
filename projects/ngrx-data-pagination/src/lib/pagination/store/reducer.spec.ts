@@ -41,7 +41,7 @@ describe('paginationContextReducer', () => {
       new GetNextPage('a context id'),
     );
 
-    const action = new GetNextPageSuccess('a context id', [0, 1, 2]);
+    const action = new GetNextPageSuccess('a context id', [0, 1, 2], false);
 
     const newState = paginationContextReducer(state, action);
 

@@ -1,9 +1,9 @@
 import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { EntityId, EntityMap } from '../entity-id';
+import { AnyEntity, EntityId, EntityMap } from '../entity';
 import { PageIterator } from '../iterator/page-iterator';
 import { PaginationFunction } from '../iterator/pagination-function';
-import { makeDispatchers, PaginationAction } from '../store/actions';
+import { makeDispatchers, PaginationActionT } from '../store/actions';
 import {
   selectCurrentPageIds,
   selectNextPageLoaded,
@@ -20,7 +20,7 @@ import { defaultPaginationContextState, PaginationState } from '../store/state';
  * 1. `dispatch` dispatches an action to the store
  * 2. TODO this library's reducer has been installed
  */
-export class StorePaginationContext<Entity extends { id: EntityId }> {
+export class StorePaginationContext<Entity extends AnyEntity> {
   private pageIterator: PageIterator<Entity>;
   private dispatchers: ReturnType<typeof makeDispatchers>;
   private state = defaultPaginationContextState;
@@ -36,12 +36,12 @@ export class StorePaginationContext<Entity extends { id: EntityId }> {
     paginationFunction: PaginationFunction<Entity, any>,
 
     // Dispatch an action meant for the PaginationReducer
-    dispatch: (action: PaginationAction) => void,
+    dispatch: (action: PaginationActionT) => void,
 
     // Allow the programmer to store entities as they like
     private onReceivePage: (entities: Entity[]) => void,
 
-    private state$: Observable<PaginationState>,
+    state$: Observable<PaginationState>,
     entityMap$: Observable<EntityMap<Entity>>,
   ) {
     this.dispatchers = makeDispatchers(contextId, dispatch);
@@ -74,7 +74,10 @@ export class StorePaginationContext<Entity extends { id: EntityId }> {
     this.dispatchers.GetNextPage();
     const page = await this.pageIterator.getNextPage();
     this.onReceivePage(page);
-    this.dispatchers.GetNextPageSuccess(page.map((e: any) => e.id));
+    this.dispatchers.GetNextPageSuccess(
+      page.map((e: any) => e.id),
+      this.pageIterator.done,
+    );
     return page;
   }
 
