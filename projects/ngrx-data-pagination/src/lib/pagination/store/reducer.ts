@@ -1,4 +1,8 @@
-import { PaginationAction, PaginationActionType as T, GetNextPage, GetNextPageSuccess } from './actions';
+import {
+  GetNextPageSuccess,
+  PaginationAction,
+  PaginationActionType as T,
+} from './actions';
 import {
   defaultPaginationContextState,
   defaultPaginationState,
@@ -6,7 +10,7 @@ import {
   PaginationState,
 } from './state';
 
-const paginationContextReducer = (
+export const paginationContextReducer = (
   state: PaginationContextState = defaultPaginationContextState,
   action: PaginationAction,
 ) => {
@@ -25,6 +29,19 @@ const paginationContextReducer = (
         ...state,
         fetchingNextPage: false,
         pages: [...state.pages, (action as GetNextPageSuccess).entityIds],
+        currentPage: state.currentPage + 1,
+      };
+
+    case T.PREV_PAGE:
+      return {
+        ...state,
+        currentPage: state.currentPage - 1,
+      };
+
+    case T.NEXT_PAGE:
+      return {
+        ...state,
+        currentPage: state.currentPage + 1,
       };
 
     default:

@@ -5,6 +5,7 @@ export interface PaginationContextState {
   // to teardown resources separately from pagination
   pages: EntityId[][];
   fetchingNextPage: boolean;
+  currentPage: number;
 }
 
 export interface PaginationState {
@@ -14,6 +15,7 @@ export interface PaginationState {
 export const defaultPaginationContextState: PaginationContextState = {
   pages: [],
   fetchingNextPage: false,
+  currentPage: 0,
 };
 
 export const defaultPaginationState: PaginationState = { contexts: {} };

@@ -1,8 +1,14 @@
-import { StorePaginationContext } from './store-pagination-context';
-import { PaginationFunction } from '../iterator/pagination-function';
+import { of } from 'rxjs';
 import { waitMs } from '../../../test-utils';
+import { PaginationFunction } from '../iterator/pagination-function';
+import { PaginationState } from '../store/state';
+import { StorePaginationContext } from './store-pagination-context';
+import { EntityMap } from '../entity-id';
+import { ResetPaginationState, GetNextPage, GetNextPageSuccess } from '../store/actions';
 
-interface TestEntity { id: number; }
+interface TestEntity {
+  id: number;
+}
 
 const testEntity = (id: number): TestEntity => ({ id });
 
@@ -27,6 +33,9 @@ describe('StorePaginationContext', () => {
       };
     };
 
+    const state$ = of<PaginationState>();
+    const entityMap$ = of<EntityMap<TestEntity>>();
+
     let dispatch: (a: any) => void;
     let onReceivePage: (a: TestEntity[]) => void;
     let context: StorePaginationContext<TestEntity>;
@@ -48,59 +57,39 @@ describe('StorePaginationContext', () => {
         paginationFunction,
         dispatch,
         onReceivePage,
+        state$,
+        entityMap$,
       );
     });
 
     it('creates', () => {
-      expect(context.getNextPage).toBeTruthy();
+      expect(context.getNextPageP).toBeTruthy();
     });
 
     it('gets the pages in order', async () => {
-      const page1 = await context.getNextPage();
+      const page1 = await context.getNextPageP();
       expect(page1).toEqual([0].map(testEntity));
 
-      const page2 = await context.getNextPage();
+      const page2 = await context.getNextPageP();
       expect(page2).toEqual([0, 1].map(testEntity));
 
-      const page3 = await context.getNextPage();
+      const page3 = await context.getNextPageP();
       expect(page3).toEqual([0, 1, 2].map(testEntity));
     });
 
     it('dispatches', async () => {
-      const resetAction = {
-        type: '[PageIterator] Reset Pagination State',
-        contextId: 'a context id',
-      };
+      const resetAction = new ResetPaginationState(contextId);
+      const getNextPageAction = new GetNextPage(contextId);
+      const getNextPageSuccessAction1 = new GetNextPageSuccess(contextId, [0]);
+      const getNextPageSuccessAction2 = new GetNextPageSuccess(contextId, [0, 1]);
 
-      const getNextPageAction = {
-        type: '[PageIterator] Get Next Page',
-        contextId: 'a context id',
-      };
-
-      const getNextPageSuccessAction1 = {
-        type: '[PageIterator] Get Next Page Success',
-        contextId: 'a context id',
-        entityIds: [0],
-      };
-
-      const getNextPageSuccessAction2 = {
-        type: '[PageIterator] Get Next Page Success',
-        contextId: 'a context id',
-        entityIds: [0, 1],
-      };
-
-      expect(dispatched).toEqual([
-        resetAction,
-      ]);
+      expect(dispatched).toEqual([resetAction]);
 
       // get page 1
 
-      const pagePromise1 = context.getNextPage();
+      const pagePromise1 = context.getNextPageP();
 
-      expect(dispatched).toEqual([
-        resetAction,
-        getNextPageAction,
-      ]);
+      expect(dispatched).toEqual([resetAction, getNextPageAction]);
 
       const page1 = await pagePromise1;
       expect(page1).toEqual([0].map(testEntity));
@@ -113,7 +102,7 @@ describe('StorePaginationContext', () => {
 
       // get page 2
 
-      const pagePromise2 = context.getNextPage();
+      const pagePromise2 = context.getNextPageP();
 
       expect(dispatched).toEqual([
         resetAction,
@@ -135,17 +124,19 @@ describe('StorePaginationContext', () => {
     });
 
     it('emits entities', async () => {
-      const page1 = await context.getNextPage();
+      const page1 = await context.getNextPageP();
       expect(page1).toEqual([0].map(testEntity));
       expect(pagesReceived).toEqual([[0].map(testEntity)]);
 
-      const page2 = await context.getNextPage();
+      const page2 = await context.getNextPageP();
       expect(page2).toEqual([0, 1].map(testEntity));
       expect(pagesReceived).toEqual([[0], [0, 1]].map(a => a.map(testEntity)));
 
-      const page3 = await context.getNextPage();
+      const page3 = await context.getNextPageP();
       expect(page3).toEqual([0, 1, 2].map(testEntity));
-      expect(pagesReceived).toEqual([[0], [0, 1], [0, 1, 2]].map(a => a.map(testEntity)));
+      expect(pagesReceived).toEqual(
+        [[0], [0, 1], [0, 1, 2]].map(a => a.map(testEntity)),
+      );
     });
   });
 });
