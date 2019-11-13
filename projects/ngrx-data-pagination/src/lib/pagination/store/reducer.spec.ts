@@ -1,18 +1,12 @@
-import {
-  GetNextPage,
-  GetNextPageSuccess,
-  PrevPage,
-  ResetPaginationState,
-  NextPage,
-} from './actions';
+import { GetNextPage, GetNextPageSuccess, NextPage, PrevPage, ResetPaginationState } from './actions';
 import { paginationContextReducer } from './reducer';
-import { defaultPaginationContextState } from './state';
+import { defaultPaginationContextState, PaginationContextState } from './state';
 
 describe('paginationContextReducer', () => {
   it('ResetPaginationState', () => {
-    const state = {
+    const state: PaginationContextState = {
       ...defaultPaginationContextState,
-      fetchingNextPage: true,
+      loadingNewPage: true,
     };
 
     const newState = paginationContextReducer(
@@ -31,7 +25,7 @@ describe('paginationContextReducer', () => {
 
     expect(newState).toEqual({
       ...defaultPaginationContextState,
-      fetchingNextPage: true,
+      loadingNewPage: true,
     });
   });
 
@@ -48,12 +42,12 @@ describe('paginationContextReducer', () => {
     expect(newState).toEqual({
       ...defaultPaginationContextState,
       pages: [[0, 1, 2]],
-      currentPage: 1,
+      currentPage: 0,
     });
   });
 
   it('PrevPage', () => {
-    const state = {
+    const state: PaginationContextState = {
       ...defaultPaginationContextState,
       currentPage: 2,
     };
@@ -70,7 +64,7 @@ describe('paginationContextReducer', () => {
   });
 
   it('NextPage', () => {
-    const state = {
+    const state: PaginationContextState = {
       ...defaultPaginationContextState,
       currentPage: 2,
     };
