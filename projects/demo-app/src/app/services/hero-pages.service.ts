@@ -7,6 +7,6 @@ import { exampleHeroes } from './example-heroes';
 @Injectable({ providedIn: 'root' })
 export class HeroPagesService {
   getPage(pageNumber: number): Observable<Hero[]> {
-    return of(exampleHeroes[pageNumber]).pipe(delay(1000));
+    return of(exampleHeroes[pageNumber]).pipe(delay(3000));
   }
 }

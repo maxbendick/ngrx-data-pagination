@@ -8,31 +8,21 @@ import {
   observableToPromisePaginationFunction,
 } from '../../iterator/pagination-function';
 import {
+  selectLoadingNewPage,
+  selectNextPageLoading,
+  selectPageNumber,
+} from '../../store/selectors';
+import {
   defaultPaginationContextState,
   PaginationContextState,
   PaginationState,
 } from '../../store/state';
 import { StorePaginationContext } from '../store-pagination-context';
 
-// // Arbitrary. Works best with one ReduxLikePaginationContext per contextId
-// contextId: string,
-
-// // For requesting the pages
-// paginationFunction: PaginationFunction<Entity, any>,
-
-// // Dispatch an action meant for the PaginationReducer
-// dispatch: (action: PaginationActionT) => void,
-
-// // Allow the programmer to store entities as they like
-// private onReceivePage: (entities: Entity[]) => void,
-
-// state$: Observable<PaginationState>,
-// entityMap$: Observable<EntityMap<Entity>>,
-
-export class NgrxDataPaginationContext<
-  Entity extends AnyEntity,
-  NextPageState
-> {
+/**
+ * Adapts `StorePaginationContext` to work with ngrx/data
+ */
+export class NgrxDataPagination<Entity extends AnyEntity, NextPageState> {
   private storePaginationContext: StorePaginationContext<Entity>;
   private state$: Observable<PaginationContextState>;
 
@@ -75,19 +65,31 @@ export class NgrxDataPaginationContext<
     );
   }
 
-  get currentPage$() {
+  get currentPage$(): Observable<Entity[]> {
     return this.storePaginationContext.currentPage$;
   }
 
-  get pageNumber$() {
-    return this.state$.pipe(map(({ currentPage }) => currentPage));
+  get pageNumber$(): Observable<number> {
+    return this.state$.pipe(map(selectPageNumber));
   }
 
-  nextPage() {
+  get loadingNextPage$(): Observable<boolean> {
+    return this.state$.pipe(map(selectNextPageLoading));
+  }
+
+  get loadingNewPage$(): Observable<boolean> {
+    return this.state$.pipe(map(selectLoadingNewPage));
+  }
+
+  get done$(): Observable<boolean> {
+    return this.state$.pipe(map(({ done }) => done));
+  }
+
+  nextPage(): void {
     return this.storePaginationContext.nextPage();
   }
 
-  prevPage() {
+  prevPage(): void {
     return this.storePaginationContext.prevPage();
   }
 }

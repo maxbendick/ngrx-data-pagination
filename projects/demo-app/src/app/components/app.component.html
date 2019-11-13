@@ -8,6 +8,12 @@
   Page: {{ pagination.currentPage$ | async | json }}
   <br>
   Page Number: {{ pagination.pageNumber$ | async | json }}
+  <br>
+  Loading next page: {{ pagination.loadingNextPage$ | async | json }}
+  <br>
+  Loading new page: {{ pagination.loadingNewPage$ | async | json }}
+  <br>
+  Done: {{ pagination.done$ | async | json }}
 </div>
 
 <br>

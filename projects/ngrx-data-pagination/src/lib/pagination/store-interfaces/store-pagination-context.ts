@@ -66,6 +66,9 @@ export class StorePaginationContext<Entity extends AnyEntity> {
 
     this.subscription.add(stateSubscription);
     this.subscription.add(entityMapSubscription);
+
+    // wait until next event loop in case of setup time
+    setTimeout(() => this.nextPage(), 0);
   }
 
   async getNextPageP(): Promise<Entity[]> {

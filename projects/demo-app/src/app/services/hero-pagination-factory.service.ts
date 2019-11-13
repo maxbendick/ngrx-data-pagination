@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  NgrxDataPaginationContext,
+  NgrxDataPagination,
   ObservablePaginationFunction,
+  Page,
 } from 'projects/ngrx-data-pagination/src/public-api';
 import { map } from 'rxjs/operators';
 import { Hero } from '../models/hero';
@@ -27,15 +28,17 @@ export class HeroPaginationFactory {
       const pageNumber = state ? state : 0;
 
       return this.heroPagesService.getPage(pageNumber).pipe(
-        map(data => ({
-          state: pageNumber + 1,
-          data: data ? data : [],
-          done: !data || !data.length,
-        })),
+        map(
+          (data): Page<Hero, HeroPaginationState> => ({
+            state: pageNumber + 1,
+            data: data ? data : [],
+            done: !data || !data.length,
+          }),
+        ),
       );
     };
 
-    return new NgrxDataPaginationContext<Hero, HeroPaginationState>(
+    return new NgrxDataPagination<Hero, HeroPaginationState>(
       'hero-context',
       paginationFunction,
       this.heroService as any,
