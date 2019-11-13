@@ -51,7 +51,7 @@ export class StorePaginationContext<Entity extends AnyEntity> {
     const stateSubscription = state$
       .pipe(map(({ contexts }) => contexts[contextId]))
       .subscribe(state => {
-        this.state = state;
+        this.state = state || defaultPaginationContextState;
       });
 
     this.entityMap$ = entityMap$.pipe(shareReplay(1));
@@ -74,6 +74,11 @@ export class StorePaginationContext<Entity extends AnyEntity> {
     this.dispatchers.GetNextPage();
     const page = await this.pageIterator.getNextPage();
     this.onReceivePage(page);
+
+    if (!page) {
+      throw new Error('bad page in getNextPageP');
+    }
+
     this.dispatchers.GetNextPageSuccess(
       page.map((e: any) => e.id),
       this.pageIterator.done,
@@ -93,10 +98,14 @@ export class StorePaginationContext<Entity extends AnyEntity> {
     this.dispatchers.NextPage();
   }
 
-  get currentPage$(): Observable<Entity[]> {
+  get currentPage$(): Observable<Entity[] | null> {
+    const { currentPageIds } = this;
+
     return this.entityMap$.pipe(
       map(entityMap =>
-        this.currentPageIds.map(entityId => entityMap[entityId]),
+        currentPageIds
+          ? currentPageIds.map(entityId => entityMap[entityId])
+          : null,
       ),
     );
   }

@@ -4,9 +4,10 @@
 
 export * from './lib/ngrx-data-pagination.module';
 export * from './lib/ngrx-data-pagination.service';
-export {
-  NgrxPaginationContext,
-} from './lib/pagination/store-interfaces/ngrx/ngrx-pagination-context';
+export { NgrxDataPaginationContext } from './lib/pagination/store-interfaces/ngrx/ngrx-pagination-context';
 export {
   StorePaginationContext,
 } from './lib/pagination/store-interfaces/store-pagination-context';
+export { paginationReducer } from './lib/pagination/store/reducer';
+export { PaginationFunction } from './lib/pagination/iterator/pagination-function';
+export * from './lib/pagination/store/selectors';

@@ -10,7 +10,8 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@ngrx/data": "^8.4.0"
+    "@ngrx/data": "^8.5.1",
+    "@ngrx/store": "^8.5.1"
   },
   "devDependencies": {
     "redux": "^4.0.4"
