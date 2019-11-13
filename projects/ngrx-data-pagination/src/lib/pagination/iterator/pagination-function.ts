@@ -18,3 +18,12 @@ export interface Page<Entity, State> {
 export type PaginationFunction<Entity, State> = (
   prevState?: State,
 ) => Promise<Page<Entity, State>>;
+
+export type ObservablePaginationFunction<Entity, State> = (
+  prevState?: State,
+) => Observable<Page<Entity, State>>;
+
+export const observableToPromisePaginationFunction = <Entity, State>(
+  observableFn: ObservablePaginationFunction<Entity, State>,
+): PaginationFunction<Entity, State> => (prevState?: State) =>
+  observableFn(prevState).toPromise();

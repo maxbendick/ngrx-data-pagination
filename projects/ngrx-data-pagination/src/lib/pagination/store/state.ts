@@ -16,7 +16,7 @@ export interface PaginationState {
 export const defaultPaginationContextState: PaginationContextState = {
   pages: [],
   fetchingNextPage: false,
-  currentPage: 0,
+  currentPage: -1,
   done: false,
 };
 

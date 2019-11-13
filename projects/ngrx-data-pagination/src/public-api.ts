@@ -9,5 +9,5 @@ export {
   StorePaginationContext,
 } from './lib/pagination/store-interfaces/store-pagination-context';
 export { paginationReducer } from './lib/pagination/store/reducer';
-export { PaginationFunction } from './lib/pagination/iterator/pagination-function';
+export { ObservablePaginationFunction } from './lib/pagination/iterator/pagination-function';
 export * from './lib/pagination/store/selectors';

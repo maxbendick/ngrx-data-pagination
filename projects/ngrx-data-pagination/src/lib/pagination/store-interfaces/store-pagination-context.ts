@@ -29,7 +29,7 @@ export class StorePaginationContext<Entity extends AnyEntity> {
   private subscription = new Subscription();
 
   constructor(
-    // Arbitrary. Works best with one ReduxLikePaginationContext per contextId
+    // Arbitrary. For now, only use one ReduxLikePaginationContext per contextId
     contextId: string,
 
     // For requesting the pages
@@ -49,9 +49,13 @@ export class StorePaginationContext<Entity extends AnyEntity> {
     this.pageIterator = new PageIterator(paginationFunction);
 
     const stateSubscription = state$
-      .pipe(map(({ contexts }) => contexts[contextId]))
+      .pipe(
+        map(state =>
+          state ? state.contexts[contextId] : defaultPaginationContextState,
+        ),
+      )
       .subscribe(state => {
-        this.state = state || defaultPaginationContextState;
+        this.state = state;
       });
 
     this.entityMap$ = entityMap$.pipe(shareReplay(1));
@@ -91,6 +95,9 @@ export class StorePaginationContext<Entity extends AnyEntity> {
   }
 
   prevPage() {
+    if (this.state.currentPage <= 0) {
+      throw new Error('Cannot go back from page 0');
+    }
     this.dispatchers.PrevPage();
   }
 

@@ -50,16 +50,18 @@ export const paginationReducer = (
   state: PaginationState = defaultPaginationState,
   action: PaginationAction,
 ) => {
-  for (const contextId of Object.keys(state.contexts)) {
-    if (contextId === action.contextId) {
-      return {
-        ...state,
-        [contextId]: paginationContextReducer(
-          state.contexts[contextId],
-          action,
-        ),
-      };
-    }
+  if (!action || !action.type.startsWith('[mb-Pagination]')) {
+    return state;
   }
-  return state;
+
+  return {
+    ...state,
+    contexts: {
+      ...state.contexts,
+      [action.contextId]: paginationContextReducer(
+        state.contexts[action.contextId],
+        action,
+      ),
+    },
+  };
 };

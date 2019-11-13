@@ -4,7 +4,7 @@ import { PaginationContextState } from './state';
 export const selectCurrentPageIds = ({
   pages,
   currentPage,
-}: PaginationContextState): EntityId[] => pages[currentPage];
+}: PaginationContextState): EntityId[] => pages ? pages[currentPage] : null;
 
 export const selectNextPageLoaded = ({
   pages,

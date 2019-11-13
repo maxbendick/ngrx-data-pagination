@@ -3,8 +3,15 @@ import { Action, select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AnyEntity } from '../../entity';
-import { PaginationFunction } from '../../iterator/pagination-function';
-import { PaginationContextState, PaginationState, defaultPaginationContextState } from '../../store/state';
+import {
+  ObservablePaginationFunction,
+  observableToPromisePaginationFunction,
+} from '../../iterator/pagination-function';
+import {
+  defaultPaginationContextState,
+  PaginationContextState,
+  PaginationState,
+} from '../../store/state';
 import { StorePaginationContext } from '../store-pagination-context';
 
 // // Arbitrary. Works best with one ReduxLikePaginationContext per contextId
@@ -31,7 +38,7 @@ export class NgrxDataPaginationContext<
 
   constructor(
     contextId: string,
-    paginationFunction: PaginationFunction<Entity, NextPageState>,
+    paginationFunction: ObservablePaginationFunction<Entity, NextPageState>,
     private entityService: EntityCollectionServiceBase<Entity, any>,
     store: Store<any>,
     ngrxDataPaginationStoreKey: string,
@@ -46,14 +53,21 @@ export class NgrxDataPaginationContext<
     ) as Observable<PaginationState>;
 
     this.state$ = paginationState$.pipe(
-      map(paginationState => paginationState.contexts[contextId] || defaultPaginationContextState),
+      map(paginationState => {
+        if (!paginationState) {
+          return defaultPaginationContextState;
+        }
+        return (
+          paginationState.contexts[contextId] || defaultPaginationContextState
+        );
+      }),
     );
 
     const entityMap$ = entityService.selectors$.entityMap$;
 
     this.storePaginationContext = new StorePaginationContext(
       contextId,
-      paginationFunction,
+      observableToPromisePaginationFunction(paginationFunction),
       dispatch,
       onReceivePage,
       paginationState$,
