@@ -109,14 +109,14 @@ export class StorePaginationContext<Entity extends AnyEntity> {
   }
 
   get currentPage$(): Observable<Entity[] | null> {
-    const { currentPageIds } = this;
-
     return this.entityMap$.pipe(
-      map(entityMap =>
-        currentPageIds
-          ? currentPageIds.map(entityId => entityMap[entityId])
-          : null,
-      ),
+      map(entityMap => {
+        const { currentPageIds } = this;
+        if (!currentPageIds) {
+          return null;
+        }
+        return currentPageIds.map(entityId => entityMap[entityId]);
+      }),
     );
   }
 
