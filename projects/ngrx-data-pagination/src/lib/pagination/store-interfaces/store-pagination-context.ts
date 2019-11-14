@@ -1,4 +1,4 @@
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, combineLatest } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { AnyEntity, EntityId, EntityMap } from '../entity';
 import { PageIterator } from '../iterator/page-iterator';
@@ -9,7 +9,7 @@ import {
   selectNextPageLoaded,
   selectNextPageLoading,
 } from '../store/selectors';
-import { defaultPaginationContextState, PaginationState } from '../store/state';
+import { defaultPaginationContextState, PaginationState, PaginationContextState } from '../store/state';
 
 // assumes paginator reducer is plugged in
 
@@ -23,7 +23,8 @@ import { defaultPaginationContextState, PaginationState } from '../store/state';
 export class StorePaginationContext<Entity extends AnyEntity> {
   private pageIterator: PageIterator<Entity>;
   private dispatchers: ReturnType<typeof makeDispatchers>;
-  private state = defaultPaginationContextState;
+  private contextState = defaultPaginationContextState;
+  private contextState$: Observable<PaginationContextState>;
   private entityMap = {};
   private entityMap$: Observable<EntityMap<Entity>>;
   private subscription = new Subscription();
@@ -44,19 +45,19 @@ export class StorePaginationContext<Entity extends AnyEntity> {
     state$: Observable<PaginationState>,
     entityMap$: Observable<EntityMap<Entity>>,
   ) {
+    this.contextState$ = state$.pipe(
+      map(state =>
+        state ? state.contexts[contextId] : defaultPaginationContextState,
+      ),
+    );
+
     this.dispatchers = makeDispatchers(contextId, dispatch);
     this.dispatchers.ResetPaginationState();
     this.pageIterator = new PageIterator(paginationFunction);
 
-    const stateSubscription = state$
-      .pipe(
-        map(state =>
-          state ? state.contexts[contextId] : defaultPaginationContextState,
-        ),
-      )
-      .subscribe(state => {
-        this.state = state;
-      });
+    const stateSubscription = this.contextState$.subscribe(contextState => {
+      this.contextState = contextState;
+    });
 
     this.entityMap$ = entityMap$.pipe(shareReplay(1));
 
@@ -72,7 +73,7 @@ export class StorePaginationContext<Entity extends AnyEntity> {
   }
 
   async getNextPageP(): Promise<Entity[]> {
-    const nextPageLoaded = selectNextPageLoaded(this.state);
+    const nextPageLoaded = selectNextPageLoaded(this.contextState);
     if (nextPageLoaded) {
       this.incrementCurrentPage();
       return;
@@ -98,7 +99,7 @@ export class StorePaginationContext<Entity extends AnyEntity> {
   }
 
   prevPage() {
-    if (this.state.currentPage <= 0) {
+    if (this.contextState.currentPage <= 0) {
       throw new Error('Cannot go back from page 0');
     }
     this.dispatchers.PrevPage();
@@ -109,27 +110,15 @@ export class StorePaginationContext<Entity extends AnyEntity> {
   }
 
   get currentPage$(): Observable<Entity[] | null> {
-    return this.entityMap$.pipe(
-      map(entityMap => {
-        const { currentPageIds } = this;
+    return combineLatest(this.entityMap$, this.contextState$).pipe(
+      map(([entityMap, contextState]) => {
+        const currentPageIds = selectCurrentPageIds(contextState);
         if (!currentPageIds) {
           return null;
         }
         return currentPageIds.map(entityId => entityMap[entityId]);
-      }),
+      })
     );
-  }
-
-  get nextPageLoading(): boolean {
-    return selectNextPageLoading(this.state);
-  }
-
-  get nextPageLoaded(): boolean {
-    return selectNextPageLoaded(this.state);
-  }
-
-  get currentPageIds(): EntityId[] {
-    return selectCurrentPageIds(this.state);
   }
 
   destroy() {
