@@ -5,7 +5,7 @@ import { EntityDataModule } from '@ngrx/data';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { paginationReducer } from 'projects/ngrx-data-pagination/src/public-api';
+import { paginationReducer, PaginationModule } from 'projects/ngrx-data-pagination/src/public-api';
 import { AppComponent } from './components/app.component';
 import { entityConfig } from './entity-metadata';
 
@@ -15,11 +15,12 @@ import { entityConfig } from './entity-metadata';
     BrowserModule,
     HttpClientModule,
     StoreModule.forRoot({
-      ngrxDataPagination: paginationReducer,
+      // ngrxDataPagination: paginationReducer,
     }),
     EffectsModule.forRoot([]),
     EntityDataModule.forRoot(entityConfig),
     StoreDevtoolsModule.instrument({}),
+    PaginationModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],

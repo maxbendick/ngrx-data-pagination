@@ -12,11 +12,13 @@ type HeroPaginationState = number;
 })
 export class AppComponent implements OnInit {
   pagination: NgrxDataPagination<Hero, HeroPaginationState>;
+  data$: any;
 
   constructor(private heroPaginationFactory: HeroPaginationFactory) {}
 
   ngOnInit() {
     this.pagination = this.heroPaginationFactory.createPagination();
+    this.data$ = this.pagination.currentPage$;
   }
 
   nextPage() {

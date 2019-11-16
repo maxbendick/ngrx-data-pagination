@@ -18,6 +18,7 @@ import {
   PaginationState,
 } from '../../store/state';
 import { StorePaginationContext } from '../store-pagination-context';
+import { paginationSelectors, paginationObservables } from './selectors';
 
 /**
  * Adapts `StorePaginationContext` to work with ngrx/data
@@ -25,6 +26,8 @@ import { StorePaginationContext } from '../store-pagination-context';
 export class NgrxDataPagination<Entity extends AnyEntity, NextPageState> {
   private storePaginationContext: StorePaginationContext<Entity>;
   private state$: Observable<PaginationContextState>;
+  public selectors: ReturnType<typeof paginationSelectors>;
+  public selectors$: ReturnType<typeof paginationObservables>;
 
   constructor(
     contextId: string,
@@ -63,6 +66,9 @@ export class NgrxDataPagination<Entity extends AnyEntity, NextPageState> {
       paginationState$,
       entityMap$,
     );
+
+    this.selectors = paginationSelectors(contextId);
+    this.selectors$ = paginationObservables(store, this.selectors);
   }
 
   get currentPage$(): Observable<Entity[]> {
@@ -70,15 +76,18 @@ export class NgrxDataPagination<Entity extends AnyEntity, NextPageState> {
   }
 
   get pageNumber$(): Observable<number> {
-    return this.state$.pipe(map(selectPageNumber));
+    return this.selectors$.pageNumber;
+    // return this.state$.pipe(map(selectPageNumber));
   }
 
   get loadingNextPage$(): Observable<boolean> {
-    return this.state$.pipe(map(selectNextPageLoading));
+    return this.selectors$.nextPageLoading;
+    // return this.state$.pipe(map(selectNextPageLoading));
   }
 
   get loadingNewPage$(): Observable<boolean> {
-    return this.state$.pipe(map(selectLoadingNewPage));
+    return this.selectors$.loadingNewPage;
+    // return this.state$.pipe(map(selectLoadingNewPage));
   }
 
   get done$(): Observable<boolean> {
