@@ -1,31 +1,31 @@
 import { EntityId } from '../entity';
 import { PaginationContextState } from './state';
 
-export const selectCurrentPageIds = ({
-  pages,
-  currentPage,
-}: PaginationContextState): EntityId[] => (pages ? pages[currentPage] : null);
+export const contextSelectors = {
+  currentPageIds: ({
+    pages,
+    currentPage,
+  }: PaginationContextState): EntityId[] => (pages ? pages[currentPage] : null),
+  nextPageLoaded: ({
+    pages,
+    currentPage,
+  }: PaginationContextState): boolean => !!pages[currentPage + 1],
+  nextPageLoading: ({
+    pages,
+    currentPage,
+    loadingNewPage,
+  }: PaginationContextState): boolean => {
+    if (!Number.isInteger(currentPage)) {
+      return loadingNewPage;
+    }
+    return !pages[currentPage + 1] && loadingNewPage;
+  },
+  loadingNewPage: ({
+    loadingNewPage,
+  }: PaginationContextState): boolean => loadingNewPage,
+  pageNumber: ({
+    currentPage,
+  }: PaginationContextState): number => (currentPage >= 0 ? currentPage : null),
+};
 
-export const selectNextPageLoaded = ({
-  pages,
-  currentPage,
-}: PaginationContextState): boolean => !!pages[currentPage + 1];
-
-export const selectNextPageLoading = ({
-  pages,
-  currentPage,
-  loadingNewPage,
-}: PaginationContextState): boolean => {
-  if (!Number.isInteger(currentPage)) {
-    return loadingNewPage;
-  }
-  return !pages[currentPage + 1] && loadingNewPage;
-}
-
-export const selectLoadingNewPage = ({
-  loadingNewPage,
-}: PaginationContextState): boolean => loadingNewPage;
-
-export const selectPageNumber = ({
-  currentPage,
-}: PaginationContextState): number => (currentPage >= 0 ? currentPage : null);
+export type ContextSelectors = typeof contextSelectors;

@@ -1,12 +1,11 @@
 import { Observable, Subscription, combineLatest } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { AnyEntity, EntityId, EntityMap } from '../entity';
+import { AnyEntity, EntityMap } from '../entity';
 import { PageIterator } from '../iterator/page-iterator';
 import { PaginationFunction } from '../iterator/pagination-function';
 import { makeDispatchers, PaginationActionT } from '../store/actions';
 import {
-  selectCurrentPageIds,
-  selectNextPageLoaded,
+  contextSelectors,
 } from '../store/selectors';
 import { defaultPaginationContextState, PaginationState, PaginationContextState } from '../store/state';
 
@@ -72,7 +71,7 @@ export class StorePaginationContext<Entity extends AnyEntity> {
   }
 
   async getNextPageP(): Promise<Entity[]> {
-    const nextPageLoaded = selectNextPageLoaded(this.contextState);
+    const nextPageLoaded = contextSelectors.nextPageLoaded(this.contextState);
     if (nextPageLoaded) {
       this.incrementCurrentPage();
       return;
@@ -111,7 +110,7 @@ export class StorePaginationContext<Entity extends AnyEntity> {
   get currentPage$(): Observable<Entity[] | null> {
     return combineLatest(this.entityMap$, this.contextState$).pipe(
       map(([entityMap, contextState]) => {
-        const currentPageIds = selectCurrentPageIds(contextState);
+        const currentPageIds = contextSelectors.currentPageIds(contextState);
         if (!currentPageIds) {
           return null;
         }

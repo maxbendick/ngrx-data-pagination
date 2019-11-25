@@ -1,5 +1,5 @@
 import { PaginationAction, PaginationActionType as T } from './actions';
-import { selectNextPageLoading } from './selectors';
+import { contextSelectors } from './selectors';
 import {
   defaultPaginationContextState,
   defaultPaginationState,
@@ -40,7 +40,7 @@ export function paginationContextReducer(
         currentPage: state.currentPage - 1,
         // If the next page is loading when the user goes back,
         // don't progress the page number when the page comes in
-        progressionCancelled: selectNextPageLoading(state),
+        progressionCancelled: contextSelectors.nextPageLoading(state),
       };
 
     case T.NEXT_PAGE:
