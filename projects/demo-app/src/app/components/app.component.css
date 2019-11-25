@@ -1,0 +1,39 @@
+.page-json {
+  font-family: monospace;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+table {
+  border-spacing: 0 10px;
+}
+
+tr {
+  padding-bottom: 20px;
+}
+
+td:nth-child(2) {
+  padding-left: 10px;
+  font-family: monospace;
+  display: inline;
+}
+
+button {
+  border-color: #CCC;
+  background: #222;
+  color: #CCC;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+button:hover {
+  background-color: #111;
+  border-color: #DDD;
+  color: #DDD;
+}
+
+button:active:hover {
+  background-color: #000;
+  border-color: #EEE;
+  color: #EEE;
+}

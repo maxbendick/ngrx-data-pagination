@@ -1,23 +1,33 @@
 <div style="text-align: center;">
   <h1>
-    Welcome to ngrx-data-pagination!
+    ngrx-data-pagination demo app
   </h1>
 </div>
 
-<div>
-  Page: <div class="code">{{ page$ | async | json }}</div>
-  <br>
-  Page Number: {{ pagination.selectors$.pageNumber | async | json }}
-  <br>
-  Loading next page: {{ pagination.selectors$.nextPageLoading | async | json }}
-  <br>
-  Loading new page: {{ pagination.selectors$.loadingNewPage | async | json }}
-  <br>
-  Done: {{ pagination.selectors$.done | async | json }}
-</div>
+Page:
+<div class="page-json">{{ page$ | async | json }}</div>
+
+<table>
+  <tr>
+    <td>Page Number</td>
+    <td>{{ pagination.selectors$.pageNumber | async | json }}</td>
+  </tr>
+  <tr>
+    <td>Next page loading</td>
+    <td>{{ pagination.selectors$.nextPageLoading | async | json }}</td>
+  </tr>
+  <tr>
+    <td>Loading new page</td>
+    <td>{{ pagination.selectors$.loadingNewPage | async | json }}</td>
+  </tr>
+  <tr>
+    <td>Done</td>
+    <td>{{ pagination.selectors$.done | async | json }}</td>
+  </tr>
+</table>
 
 <br>
-<button (click)="nextPage()">Next Page</button>
-<br>
-<br>
-<button (click)="prevPage()">Prev Page</button>
+
+<button (click)="prevPage()">&larr; Prev Page</button>
+<button (click)="nextPage()">Next Page &rarr;</button>
+
