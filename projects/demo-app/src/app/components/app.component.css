@@ -1,3 +1,18 @@
+a {
+  color: #4af;
+  display: block;
+  margin-bottom: 7px;
+}
+
+a:hover {
+  color: #5bf;
+}
+
+.mono {
+  font-family: monospace;
+  display: inline;
+}
+
 .page-json {
   font-family: monospace;
   margin-top: 5px;
@@ -36,4 +51,8 @@ button:active:hover {
   background-color: #000;
   border-color: #EEE;
   color: #EEE;
+}
+
+hr {
+  border-color: #666;
 }

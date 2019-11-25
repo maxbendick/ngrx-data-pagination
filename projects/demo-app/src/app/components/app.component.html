@@ -4,6 +4,15 @@
   </h1>
 </div>
 
+<a [href]="demoCodeLink" target="_blank">
+  Demo app source code
+</a>
+<a [href]="libraryCodeLink" target="_blank">
+  Library source code
+</a>
+
+<br>
+
 Page:
 <div class="page-json">{{ page$ | async | json }}</div>
 
@@ -31,3 +40,11 @@ Page:
 <button (click)="prevPage()">&larr; Prev Page</button>
 <button (click)="nextPage()">Next Page &rarr;</button>
 
+<br><br><hr><br>
+
+There are three rules when using the <div class="mono">Pagination</div> object:
+<ul>
+  <li>Don't go back from the first page (i.e., <div class="mono">pageNumber</div> is <div class="mono">0</div> or <div class="mono">null</div>)</li>
+  <li>Don't go forward when the next page is loading (i.e., <div class="mono">nextPageLoading</div> is <div class="mono">true</div>)</li>
+  <li>Don't go forward from the last page after becoming <div class="mono">done</div></li>
+</ul>

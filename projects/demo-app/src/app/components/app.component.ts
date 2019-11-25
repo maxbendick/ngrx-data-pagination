@@ -15,6 +15,11 @@ export class AppComponent implements OnInit {
   pagination: Pagination<Hero, HeroPaginationState>;
   page$: Observable<Hero[]>;
 
+  demoCodeLink =
+    'https://github.com/maxbendick/ngrx-data-pagination/tree/master/projects/demo-app';
+  libraryCodeLink =
+    'https://github.com/maxbendick/ngrx-data-pagination/tree/master/projects/ngrx-data-pagination';
+
   constructor(private heroPaginationFactory: HeroPaginationFactory) {}
 
   ngOnInit() {
