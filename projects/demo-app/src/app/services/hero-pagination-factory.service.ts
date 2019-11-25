@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
 import {
-  NgrxDataPagination,
   ObservablePaginationFunction,
   Page,
+  PaginationFactory,
 } from 'projects/ngrx-data-pagination/src/public-api';
 import { map } from 'rxjs/operators';
 import { Hero } from '../models/hero';
@@ -16,8 +15,8 @@ type HeroPaginationState = number;
 export class HeroPaginationFactory {
   constructor(
     private heroService: HeroService,
-    private store: Store<any>,
     private heroPagesService: HeroPagesService,
+    private paginationFactory: PaginationFactory,
   ) {}
 
   createPagination() {
@@ -38,12 +37,10 @@ export class HeroPaginationFactory {
       );
     };
 
-    return new NgrxDataPagination<Hero, HeroPaginationState>(
-      'hero-context',
+    return this.paginationFactory.create({
+      contextId: 'hero-context',
+      entityService: this.heroService as any,
       paginationFunction,
-      this.heroService as any,
-      this.store,
-      'ngrxDataPagination',
-    );
+    });
   }
 }
