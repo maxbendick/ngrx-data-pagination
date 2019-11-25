@@ -8,11 +8,6 @@ import {
   observableToPromisePaginationFunction,
 } from '../../iterator/pagination-function';
 import {
-  selectLoadingNewPage,
-  selectNextPageLoading,
-  selectPageNumber,
-} from '../../store/selectors';
-import {
   defaultPaginationContextState,
   PaginationContextState,
   PaginationState,
@@ -77,17 +72,14 @@ export class NgrxDataPagination<Entity extends AnyEntity, NextPageState> {
 
   get pageNumber$(): Observable<number> {
     return this.selectors$.pageNumber;
-    // return this.state$.pipe(map(selectPageNumber));
   }
 
   get loadingNextPage$(): Observable<boolean> {
     return this.selectors$.nextPageLoading;
-    // return this.state$.pipe(map(selectNextPageLoading));
   }
 
   get loadingNewPage$(): Observable<boolean> {
     return this.selectors$.loadingNewPage;
-    // return this.state$.pipe(map(selectLoadingNewPage));
   }
 
   get done$(): Observable<boolean> {

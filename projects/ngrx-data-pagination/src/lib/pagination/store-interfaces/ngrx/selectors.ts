@@ -29,7 +29,7 @@ export const paginationObservables = (store: Store<any>, selectors: ReturnType<t
     return {
         currentPageIds: sel(selectors.currentPageIds),
         nextPageLoaded: sel(selectors.nextPageLoaded),
-        nextPageLoading: sel(selectNextPageLoading),
+        nextPageLoading: sel(selectors.nextPageLoading),
         loadingNewPage: sel(selectors.loadingNewPage),
         pageNumber: sel(selectors.pageNumber),
     }

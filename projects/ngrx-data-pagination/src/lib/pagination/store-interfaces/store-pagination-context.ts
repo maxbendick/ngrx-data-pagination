@@ -7,7 +7,6 @@ import { makeDispatchers, PaginationActionT } from '../store/actions';
 import {
   selectCurrentPageIds,
   selectNextPageLoaded,
-  selectNextPageLoading,
 } from '../store/selectors';
 import { defaultPaginationContextState, PaginationState, PaginationContextState } from '../store/state';
 

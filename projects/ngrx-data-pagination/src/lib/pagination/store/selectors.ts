@@ -15,8 +15,12 @@ export const selectNextPageLoading = ({
   pages,
   currentPage,
   loadingNewPage,
-}: PaginationContextState): boolean =>
-  !pages[currentPage + 1] && loadingNewPage;
+}: PaginationContextState): boolean => {
+  if (!Number.isInteger(currentPage)) {
+    return loadingNewPage;
+  }
+  return !pages[currentPage + 1] && loadingNewPage;
+}
 
 export const selectLoadingNewPage = ({
   loadingNewPage,
