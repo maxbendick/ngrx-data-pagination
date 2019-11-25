@@ -22,6 +22,7 @@ export const contextSelectors = {
     loadingNewPage,
   pageNumber: ({ currentPage }: PaginationContextState): number =>
     currentPage >= 0 ? currentPage : null,
+  done: ({ done }) => done,
 };
 
 export type ContextSelectors = typeof contextSelectors;

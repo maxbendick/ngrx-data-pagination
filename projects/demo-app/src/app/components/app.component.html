@@ -7,13 +7,13 @@
 <div>
   Page: {{ data$ | async | json }}
   <br>
-  Page Number: {{ pagination.pageNumber$ | async | json }}
+  Page Number: {{ pagination.selectors$.pageNumber | async | json }}
   <br>
-  Loading next page: {{ pagination.loadingNextPage$ | async | json }}
+  Loading next page: {{ pagination.selectors$.nextPageLoading | async | json }}
   <br>
-  Loading new page: {{ pagination.loadingNewPage$ | async | json }}
+  Loading new page: {{ pagination.selectors$.loadingNewPage | async | json }}
   <br>
-  Done: {{ pagination.done$ | async | json }}
+  Done: {{ pagination.selectors$.done | async | json }}
 </div>
 
 <br>

@@ -1,28 +1,27 @@
 import { EntityCollectionServiceBase } from '@ngrx/data';
 import { Action, select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { AnyEntity } from '../../entity';
 import {
   ObservablePaginationFunction,
   observableToPromisePaginationFunction,
 } from '../../iterator/pagination-function';
-import {
-  defaultPaginationContextState,
-  PaginationContextState,
-  PaginationState,
-} from '../../store/state';
+import { PaginationState } from '../../store/state';
 import { StorePaginationContext } from '../store-pagination-context';
-import { paginationObservables, paginationSelectors } from './selectors';
+import {
+  AllNgrxPaginationObservables,
+  AllNgrxPaginationSelectors,
+  allPaginationObservables,
+  allPaginationSelectors,
+} from './selectors';
 
 /**
  * Adapts `StorePaginationContext` to work with ngrx/data
  */
 export class NgrxDataPagination<Entity extends AnyEntity, NextPageState> {
   private storePaginationContext: StorePaginationContext<Entity>;
-  private state$: Observable<PaginationContextState>;
-  public selectors: ReturnType<typeof paginationSelectors>;
-  public selectors$: ReturnType<typeof paginationObservables>;
+  public selectors: AllNgrxPaginationSelectors<Entity>;
+  public selectors$: AllNgrxPaginationObservables<Entity>;
 
   constructor(
     contextId: string,
@@ -40,17 +39,6 @@ export class NgrxDataPagination<Entity extends AnyEntity, NextPageState> {
       select(ngrxDataPaginationStoreKey),
     ) as Observable<PaginationState>;
 
-    this.state$ = paginationState$.pipe(
-      map(paginationState => {
-        if (!paginationState) {
-          return defaultPaginationContextState;
-        }
-        return (
-          paginationState.contexts[contextId] || defaultPaginationContextState
-        );
-      }),
-    );
-
     const entityMap$ = entityService.selectors$.entityMap$;
 
     this.storePaginationContext = new StorePaginationContext(
@@ -62,28 +50,8 @@ export class NgrxDataPagination<Entity extends AnyEntity, NextPageState> {
       entityMap$,
     );
 
-    this.selectors = paginationSelectors(contextId);
-    this.selectors$ = paginationObservables(store, this.selectors);
-  }
-
-  get currentPage$(): Observable<Entity[]> {
-    return this.storePaginationContext.currentPage$;
-  }
-
-  get pageNumber$(): Observable<number> {
-    return this.selectors$.pageNumber;
-  }
-
-  get loadingNextPage$(): Observable<boolean> {
-    return this.selectors$.nextPageLoading;
-  }
-
-  get loadingNewPage$(): Observable<boolean> {
-    return this.selectors$.loadingNewPage;
-  }
-
-  get done$(): Observable<boolean> {
-    return this.state$.pipe(map(({ done }) => done));
+    this.selectors = allPaginationSelectors(contextId, entityService);
+    this.selectors$ = allPaginationObservables(store, this.selectors);
   }
 
   nextPage(): void {

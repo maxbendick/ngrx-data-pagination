@@ -1,22 +1,48 @@
+import { EntityCollectionServiceBase } from '@ngrx/data';
 import {
-  Store,
-  createSelector,
   createFeatureSelector,
-  Selector,
+  createSelector,
   select,
+  Selector,
+  Store,
 } from '@ngrx/store';
-import { PaginationState, PaginationContextState } from '../../store/state';
-import { ContextSelectors, contextSelectors } from '../../store/selectors';
-import { defaultStoreKey } from './default-store-key';
 import { Observable } from 'rxjs';
+import { ContextSelectors, contextSelectors } from '../../store/selectors';
+import { PaginationContextState, PaginationState } from '../../store/state';
+import { defaultStoreKey } from './default-store-key';
 
-type PaginationSelectors = {
+// These selections require knowledge of the entity cache
+interface AdvancedSelections<Entity> {
+  page: Entity[] | null;
+}
+
+export type BasicNgrxPaginationSelectors = {
   [K in keyof ContextSelectors]: Selector<any, ReturnType<ContextSelectors[K]>>;
 };
 
-type PaginationObservables = {
+type AdvancedNgrxPaginationSelectors<Entity> = {
+  [K in keyof AdvancedSelections<Entity>]: Selector<
+    any,
+    AdvancedSelections<Entity>[K]
+  >;
+};
+
+export type AllNgrxPaginationSelectors<Entity> = BasicNgrxPaginationSelectors &
+  AdvancedNgrxPaginationSelectors<Entity>;
+
+export type BasicNgrxPaginationObservables = {
   [K in keyof ContextSelectors]: Observable<ReturnType<ContextSelectors[K]>>;
 };
+
+type AdvancedNgrxPaginationObservables<Entity> = {
+  [K in keyof AdvancedSelections<Entity>]: Observable<
+    AdvancedSelections<Entity>[K]
+  >;
+};
+
+export type AllNgrxPaginationObservables<
+  Entity
+> = BasicNgrxPaginationObservables & AdvancedNgrxPaginationObservables<Entity>;
 
 const mapKeys = <A>(obj: any, f: any): { [K in keyof A]: any } => {
   const result = {};
@@ -28,7 +54,12 @@ const mapKeys = <A>(obj: any, f: any): { [K in keyof A]: any } => {
   return result as any;
 };
 
-export const paginationSelectors = (contextId: string): PaginationSelectors => {
+/**
+ * Creates pagination selectors that only know about the pagination state
+ */
+const basicPaginationSelectors = (
+  contextId: string,
+): BasicNgrxPaginationSelectors => {
   const paginationState = createFeatureSelector<PaginationState>(
     defaultStoreKey,
   );
@@ -43,11 +74,46 @@ export const paginationSelectors = (contextId: string): PaginationSelectors => {
   return mapKeys(contextSelectors, contextSelector);
 };
 
-export const paginationObservables = (
-  store: Store<any>,
-  selectors: PaginationSelectors,
-): PaginationObservables => {
-  const sel = <A>(selector: Selector<any, A>) => store.pipe(select(selector));
+/**
+ * Creates selectors that know about the entity cache
+ */
+const advancedPaginationSelectors = <Entity>(
+  basicPaginationSelectors: BasicNgrxPaginationSelectors,
+  entityService: EntityCollectionServiceBase<Entity, any>,
+): AdvancedNgrxPaginationSelectors<Entity> => {
+  return {
+    page: createSelector(
+      basicPaginationSelectors.currentPageIds,
+      entityService.selectors.selectEntityMap,
+      (ids, entityMap) => {
+        if (!ids || !entityMap) {
+          return null;
+        }
+        return ids.map(id => entityMap[id]);
+      },
+    ),
+  };
+};
 
-  return mapKeys(selectors, sel);
+export const allPaginationSelectors = <Entity>(
+  contextId: string,
+  entityService: EntityCollectionServiceBase<Entity, any>,
+) => {
+  const basicSelectors = basicPaginationSelectors(contextId);
+  const advancedSelectors = advancedPaginationSelectors(
+    basicSelectors,
+    entityService,
+  );
+  return {
+    ...basicSelectors,
+    ...advancedSelectors,
+  };
+};
+
+export const allPaginationObservables = <Entity>(
+  store: Store<any>,
+  allSelectors: AllNgrxPaginationSelectors<Entity>,
+): AllNgrxPaginationObservables<Entity> => {
+  const sel = <A>(selector: Selector<any, A>) => store.pipe(select(selector));
+  return mapKeys(allSelectors, sel);
 };
