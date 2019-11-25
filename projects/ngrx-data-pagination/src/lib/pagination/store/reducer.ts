@@ -4,13 +4,13 @@ import {
   defaultPaginationContextState,
   defaultPaginationState,
   PaginationContextState,
-  PaginationState,
+  PaginationState
 } from './state';
 
-export const paginationContextReducer = (
+export function paginationContextReducer(
   state: PaginationContextState = defaultPaginationContextState,
   action: PaginationAction,
-): PaginationContextState => {
+): PaginationContextState {
   switch (action.type) {
     case T.RESET_PAGINATION_STATE:
       return defaultPaginationContextState;
@@ -54,10 +54,10 @@ export const paginationContextReducer = (
   }
 };
 
-export const paginationReducer = (
+export function paginationReducer(
   state: PaginationState = defaultPaginationState,
   action: PaginationAction,
-): PaginationState => {
+): PaginationState {
   if (!action || !action.type.startsWith('[mb-Pagination]')) {
     return state;
   }
