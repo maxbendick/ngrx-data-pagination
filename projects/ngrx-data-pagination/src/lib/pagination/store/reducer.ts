@@ -4,7 +4,7 @@ import {
   defaultPaginationContextState,
   defaultPaginationState,
   PaginationContextState,
-  PaginationState
+  PaginationState,
 } from './state';
 
 export function paginationContextReducer(
@@ -52,7 +52,7 @@ export function paginationContextReducer(
     default:
       return state;
   }
-};
+}
 
 export function paginationReducer(
   state: PaginationState = defaultPaginationState,
@@ -72,4 +72,4 @@ export function paginationReducer(
       ),
     },
   };
-};
+}

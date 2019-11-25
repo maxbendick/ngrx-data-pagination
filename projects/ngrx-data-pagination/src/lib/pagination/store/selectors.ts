@@ -6,10 +6,8 @@ export const contextSelectors = {
     pages,
     currentPage,
   }: PaginationContextState): EntityId[] => (pages ? pages[currentPage] : null),
-  nextPageLoaded: ({
-    pages,
-    currentPage,
-  }: PaginationContextState): boolean => !!pages[currentPage + 1],
+  nextPageLoaded: ({ pages, currentPage }: PaginationContextState): boolean =>
+    !!pages[currentPage + 1],
   nextPageLoading: ({
     pages,
     currentPage,
@@ -20,12 +18,10 @@ export const contextSelectors = {
     }
     return !pages[currentPage + 1] && loadingNewPage;
   },
-  loadingNewPage: ({
+  loadingNewPage: ({ loadingNewPage }: PaginationContextState): boolean =>
     loadingNewPage,
-  }: PaginationContextState): boolean => loadingNewPage,
-  pageNumber: ({
-    currentPage,
-  }: PaginationContextState): number => (currentPage >= 0 ? currentPage : null),
+  pageNumber: ({ currentPage }: PaginationContextState): number =>
+    currentPage >= 0 ? currentPage : null,
 };
 
 export type ContextSelectors = typeof contextSelectors;

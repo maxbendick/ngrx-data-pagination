@@ -1,4 +1,10 @@
-import { GetNextPage, GetNextPageSuccess, NextPage, PrevPage, ResetPaginationState } from './actions';
+import {
+  GetNextPage,
+  GetNextPageSuccess,
+  NextPage,
+  PrevPage,
+  ResetPaginationState,
+} from './actions';
 import { paginationContextReducer } from './reducer';
 import { defaultPaginationContextState, PaginationContextState } from './state';
 

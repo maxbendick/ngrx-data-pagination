@@ -13,7 +13,7 @@ import {
   PaginationState,
 } from '../../store/state';
 import { StorePaginationContext } from '../store-pagination-context';
-import { paginationSelectors, paginationObservables } from './selectors';
+import { paginationObservables, paginationSelectors } from './selectors';
 
 /**
  * Adapts `StorePaginationContext` to work with ngrx/data

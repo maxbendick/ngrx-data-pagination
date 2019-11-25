@@ -5,7 +5,7 @@ import { EntityDataModule } from '@ngrx/data';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { paginationReducer, PaginationModule } from 'projects/ngrx-data-pagination/src/public-api';
+import { PaginationModule } from 'projects/ngrx-data-pagination/src/public-api';
 import { AppComponent } from './components/app.component';
 import { entityConfig } from './entity-metadata';
 

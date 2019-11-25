@@ -1,17 +1,22 @@
-import { NgModule, Optional, SkipSelf, ModuleWithProviders, Inject } from '@angular/core';
-import { PaginationFactory } from './pagination-factory.service';
+import {
+  Inject,
+  ModuleWithProviders,
+  NgModule,
+  Optional,
+  SkipSelf,
+} from '@angular/core';
 import { StoreModule } from '@ngrx/store';
 import { paginationReducer } from '../../store/reducer';
 import { defaultStoreKey } from './default-store-key';
+import { PaginationFactory } from './pagination-factory.service';
 
 const NGRX_DATA_PAGINATION_STORE_KEY = 'NGRX_DATA_PAGINATION_STORE_KEY';
-
 
 @NgModule({
   declarations: [],
   imports: [StoreModule.forFeature(defaultStoreKey, paginationReducer)],
   exports: [],
-  providers: [PaginationFactory]
+  providers: [PaginationFactory],
 })
 export class PaginationModule {
   constructor(
@@ -20,10 +25,13 @@ export class PaginationModule {
   ) {
     if (parentModule) {
       throw new Error(
-        'PaginationModule is already loaded. Import it in the AppModule only');
+        'PaginationModule is already loaded. Import it in the AppModule only',
+      );
     }
     if (!storeKey) {
-      throw new Error('PaginationModule requires StoreModule.forRoot() to be imported');
+      throw new Error(
+        'PaginationModule requires StoreModule.forRoot() to be imported',
+      );
     }
   }
 
@@ -38,7 +46,7 @@ export class PaginationModule {
           provide: NGRX_DATA_PAGINATION_STORE_KEY,
           useValue: defaultStoreKey,
         },
-      ]
+      ],
     };
   }
 }
