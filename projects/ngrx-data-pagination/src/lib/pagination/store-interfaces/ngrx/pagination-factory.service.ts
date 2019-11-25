@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { AnyEntity } from '../../entity';
 import { ObservablePaginationFunction } from '../../iterator/pagination-function';
 import { defaultStoreKey } from './default-store-key';
-import { NgrxDataPagination } from './ngrx-data-pagination';
+import { Pagination } from './pagination';
 
 export interface PaginationFactoryArgs<
   Entity extends AnyEntity,
@@ -25,14 +25,14 @@ export class PaginationFactory {
     contextId,
     entityService,
     paginationFunction,
-  }: PaginationFactoryArgs<Entity, NextPageState>): NgrxDataPagination<
+  }: PaginationFactoryArgs<Entity, NextPageState>): Pagination<
     Entity,
     NextPageState
   > {
     const safeContextId =
       contextId || `${entityService.entityName}-${this.counter++}`;
 
-    return new NgrxDataPagination(
+    return new Pagination(
       safeContextId,
       paginationFunction,
       entityService,

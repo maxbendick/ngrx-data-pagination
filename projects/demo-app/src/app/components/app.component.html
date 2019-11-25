@@ -5,7 +5,7 @@
 </div>
 
 <div>
-  Page: {{ data$ | async | json }}
+  Page: <div class="code">{{ page$ | async | json }}</div>
   <br>
   Page Number: {{ pagination.selectors$.pageNumber | async | json }}
   <br>

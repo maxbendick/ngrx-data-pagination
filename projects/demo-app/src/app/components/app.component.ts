@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgrxDataPagination } from 'projects/ngrx-data-pagination/src/public-api';
+import { Pagination } from 'projects/ngrx-data-pagination/src/public-api';
 import { Observable } from 'rxjs';
 import { Hero } from '../models/hero';
 import { HeroPaginationFactory } from '../services/hero-pagination-factory.service';
@@ -12,14 +12,14 @@ type HeroPaginationState = number;
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  pagination: NgrxDataPagination<Hero, HeroPaginationState>;
-  data$: Observable<Hero[]>;
+  pagination: Pagination<Hero, HeroPaginationState>;
+  page$: Observable<Hero[]>;
 
   constructor(private heroPaginationFactory: HeroPaginationFactory) {}
 
   ngOnInit() {
     this.pagination = this.heroPaginationFactory.createPagination();
-    this.data$ = this.pagination.selectors$.page;
+    this.page$ = this.pagination.selectors$.page;
   }
 
   nextPage() {

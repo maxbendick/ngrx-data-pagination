@@ -10,7 +10,7 @@ export {
   Page,
 } from './lib/pagination/iterator/pagination-function';
 export { defaultStoreKey as NGRX_DATA_PAGINATION_STORE_KEY } from './lib/pagination/store-interfaces/ngrx/default-store-key';
-export { NgrxDataPagination } from './lib/pagination/store-interfaces/ngrx/ngrx-data-pagination';
+export { Pagination } from './lib/pagination/store-interfaces/ngrx/pagination';
 export { PaginationFactory } from './lib/pagination/store-interfaces/ngrx/pagination-factory.service';
 export { PaginationModule } from './lib/pagination/store-interfaces/ngrx/pagination.module';
 export { paginationReducer } from './lib/pagination/store/reducer';
