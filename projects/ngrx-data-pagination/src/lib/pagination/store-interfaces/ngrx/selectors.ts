@@ -44,7 +44,7 @@ export type AllNgrxPaginationObservables<
   Entity
 > = BasicNgrxPaginationObservables & AdvancedNgrxPaginationObservables<Entity>;
 
-const mapKeys = <A>(obj: any, f: any): { [K in keyof A]: any } => {
+const mapValues = <A>(obj: any, f: any): { [K in keyof A]: any } => {
   const result = {};
 
   for (const k of Object.keys(obj)) {
@@ -71,7 +71,7 @@ const basicPaginationSelectors = (
   const contextSelector = <A>(f: (s: PaginationContextState) => A) =>
     createSelector(contextState, f);
 
-  return mapKeys(contextSelectors, contextSelector);
+  return mapValues(contextSelectors, contextSelector);
 };
 
 /**
@@ -115,5 +115,5 @@ export const allPaginationObservables = <Entity>(
   allSelectors: AllNgrxPaginationSelectors<Entity>,
 ): AllNgrxPaginationObservables<Entity> => {
   const sel = <A>(selector: Selector<any, A>) => store.pipe(select(selector));
-  return mapKeys(allSelectors, sel);
+  return mapValues(allSelectors, sel);
 };
