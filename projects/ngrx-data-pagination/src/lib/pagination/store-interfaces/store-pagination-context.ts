@@ -1,13 +1,15 @@
-import { Observable, Subscription, combineLatest } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { AnyEntity, EntityMap } from '../entity';
 import { PageIterator } from '../iterator/page-iterator';
 import { PaginationFunction } from '../iterator/pagination-function';
 import { makeDispatchers, PaginationActionT } from '../store/actions';
+import { contextSelectors } from '../store/selectors';
 import {
-  contextSelectors,
-} from '../store/selectors';
-import { defaultPaginationContextState, PaginationState, PaginationContextState } from '../store/state';
+  defaultPaginationContextState,
+  PaginationContextState,
+  PaginationState,
+} from '../store/state';
 
 // assumes paginator reducer is plugged in
 
@@ -23,9 +25,8 @@ export class StorePaginationContext<Entity extends AnyEntity> {
   private dispatchers: ReturnType<typeof makeDispatchers>;
   private contextState = defaultPaginationContextState;
   private contextState$: Observable<PaginationContextState>;
-  private entityMap = {};
   private entityMap$: Observable<EntityMap<Entity>>;
-  private subscription = new Subscription();
+  private subscription: Subscription;
 
   constructor(
     // Arbitrary. For now, only use one ReduxLikePaginationContext per contextId
@@ -49,22 +50,15 @@ export class StorePaginationContext<Entity extends AnyEntity> {
       ),
     );
 
+    this.subscription = this.contextState$.subscribe(contextState => {
+      this.contextState = contextState;
+    });
+
     this.dispatchers = makeDispatchers(contextId, dispatch);
     this.dispatchers.ResetPaginationState();
     this.pageIterator = new PageIterator(paginationFunction);
 
-    const stateSubscription = this.contextState$.subscribe(contextState => {
-      this.contextState = contextState;
-    });
-
     this.entityMap$ = entityMap$.pipe(shareReplay(1));
-
-    const entityMapSubscription = this.entityMap$.subscribe(entityMap => {
-      this.entityMap = entityMap;
-    });
-
-    this.subscription.add(stateSubscription);
-    this.subscription.add(entityMapSubscription);
 
     // wait until next event loop in case of setup time
     setTimeout(() => this.nextPage(), 0);
@@ -86,9 +80,10 @@ export class StorePaginationContext<Entity extends AnyEntity> {
     }
 
     this.dispatchers.GetNextPageSuccess(
-      page.map((e: any) => e.id),
+      page.map(({ id }) => id),
       this.pageIterator.done,
     );
+    
     return page;
   }
 
@@ -115,7 +110,7 @@ export class StorePaginationContext<Entity extends AnyEntity> {
           return null;
         }
         return currentPageIds.map(entityId => entityMap[entityId]);
-      })
+      }),
     );
   }
 
