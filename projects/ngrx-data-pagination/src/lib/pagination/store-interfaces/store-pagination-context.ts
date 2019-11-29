@@ -71,6 +71,10 @@ export class StorePaginationContext<Entity extends AnyEntity> {
       return;
     }
 
+    if (contextSelectors.done(this.contextState)) {
+      throw new Error('Cannot get more pages after becoming done');
+    }
+
     this.dispatchers.GetNextPage();
     const page = await this.pageIterator.getNextPage();
     this.onReceivePage(page);
@@ -83,7 +87,7 @@ export class StorePaginationContext<Entity extends AnyEntity> {
       page.map(({ id }) => id),
       this.pageIterator.done,
     );
-    
+
     return page;
   }
 
