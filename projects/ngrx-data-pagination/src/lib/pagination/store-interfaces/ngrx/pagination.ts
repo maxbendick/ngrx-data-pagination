@@ -29,11 +29,12 @@ export class Pagination<Entity extends AnyEntity, NextPageState> {
     private entityService: EntityCollectionServiceBase<Entity, any>,
     store: Store<any>,
     ngrxDataPaginationStoreKey: string,
+    addToCache: boolean,
   ) {
     const dispatch = (action: Action) => store.dispatch(action);
 
     const onReceivePage = (page: Entity[]) =>
-      this.entityService.upsertManyInCache(page);
+      addToCache ? this.entityService.upsertManyInCache(page) : null;
 
     const paginationState$ = store.pipe(
       select(ngrxDataPaginationStoreKey),

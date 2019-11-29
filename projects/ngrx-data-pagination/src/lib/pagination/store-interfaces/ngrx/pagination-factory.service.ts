@@ -13,6 +13,7 @@ export interface PaginationFactoryArgs<
   contextId?: string;
   paginationFunction: ObservablePaginationFunction<Entity, NextPageState>;
   entityService: EntityCollectionServiceBase<Entity, any>;
+  addToCache?: boolean;
 }
 
 @Injectable()
@@ -22,22 +23,21 @@ export class PaginationFactory {
   constructor(private store: Store<any>) {}
 
   create<Entity extends AnyEntity, NextPageState>({
-    contextId,
     entityService,
     paginationFunction,
+    addToCache = true,
+    contextId = `${entityService.entityName}-${this.counter++}`,
   }: PaginationFactoryArgs<Entity, NextPageState>): Pagination<
     Entity,
     NextPageState
   > {
-    const safeContextId =
-      contextId || `${entityService.entityName}-${this.counter++}`;
-
     return new Pagination(
-      safeContextId,
+      contextId,
       paginationFunction,
       entityService,
       this.store,
       defaultStoreKey,
+      addToCache,
     );
   }
 }
