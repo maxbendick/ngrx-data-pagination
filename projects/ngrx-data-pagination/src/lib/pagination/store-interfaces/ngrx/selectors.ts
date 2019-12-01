@@ -1,4 +1,4 @@
-import { EntityCollectionServiceBase } from '@ngrx/data';
+import { Dictionary } from '@ngrx/entity';
 import {
   createFeatureSelector,
   createSelector,
@@ -79,12 +79,12 @@ const basicPaginationSelectors = (
  */
 const advancedPaginationSelectors = <Entity>(
   basicPaginationSelectors: BasicNgrxPaginationSelectors,
-  entityService: EntityCollectionServiceBase<Entity, any>,
+  selectEntityMap: Selector<any, Dictionary<Entity>>,
 ): AdvancedNgrxPaginationSelectors<Entity> => {
   return {
     page: createSelector(
       basicPaginationSelectors.currentPageIds,
-      entityService.selectors.selectEntityMap,
+      selectEntityMap,
       (ids, entityMap) => {
         if (!ids || !entityMap) {
           return null;
@@ -97,12 +97,12 @@ const advancedPaginationSelectors = <Entity>(
 
 export const allPaginationSelectors = <Entity>(
   contextId: string,
-  entityService: EntityCollectionServiceBase<Entity, any>,
+  selectEntityMap: Selector<any, Dictionary<Entity>>,
 ) => {
   const basicSelectors = basicPaginationSelectors(contextId);
   const advancedSelectors = advancedPaginationSelectors(
     basicSelectors,
-    entityService,
+    selectEntityMap,
   );
   return {
     ...basicSelectors,

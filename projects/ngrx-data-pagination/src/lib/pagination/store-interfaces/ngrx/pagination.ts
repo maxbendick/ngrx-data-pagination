@@ -51,7 +51,10 @@ export class Pagination<Entity extends AnyEntity, NextPageState = any> {
       entityMap$,
     );
 
-    this.selectors = allPaginationSelectors(contextId, entityService);
+    this.selectors = allPaginationSelectors(
+      contextId,
+      entityService.selectors.selectEntityMap,
+    );
     this.selectors$ = allPaginationObservables(store, this.selectors);
   }
 
