@@ -21,16 +21,16 @@ const NGRX_DATA_PAGINATION_STORE_KEY = 'NGRX_DATA_PAGINATION_STORE_KEY';
 export class PaginationModule {
   constructor(
     @Optional() @SkipSelf() parentModule: PaginationModule,
-    @Inject(NGRX_DATA_PAGINATION_STORE_KEY) storeKey: string,
+    @Optional() @Inject(NGRX_DATA_PAGINATION_STORE_KEY) storeKey: string,
   ) {
     if (parentModule) {
       throw new Error(
-        'PaginationModule is already loaded. Import it in the AppModule only',
+        'PaginationModule is already loaded. Import it in the root module (usually the AppModule) only',
       );
     }
     if (!storeKey) {
       throw new Error(
-        'PaginationModule requires StoreModule.forRoot() to be imported',
+        'ngrx-data-pagination requires PaginationModule.forRoot() to be imported',
       );
     }
   }
@@ -38,7 +38,7 @@ export class PaginationModule {
   /**
    * `storeKey` doesn't actually work yet`
    */
-  static forRoot(storeKey: string = defaultStoreKey): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders {
     return {
       ngModule: PaginationModule,
       providers: [
