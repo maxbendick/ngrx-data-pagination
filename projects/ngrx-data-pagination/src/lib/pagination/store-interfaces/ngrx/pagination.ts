@@ -18,7 +18,7 @@ import {
 /**
  * Adapts `StorePaginationContext` to work with ngrx/data
  */
-export class Pagination<Entity extends AnyEntity, NextPageState> {
+export class Pagination<Entity extends AnyEntity, NextPageState = any> {
   private storePaginationContext: StorePaginationContext<Entity>;
   public selectors: AllNgrxPaginationSelectors<Entity>;
   public selectors$: AllNgrxPaginationObservables<Entity>;

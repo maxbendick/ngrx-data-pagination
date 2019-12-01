@@ -6,7 +6,7 @@ export class PageIterator<Entity> {
   public done = false;
   private pending = false;
 
-  constructor(paginationFunction: PaginationFunction<Entity, any>) {
+  constructor(paginationFunction: PaginationFunction<Entity>) {
     this.asyncPageGenerator = asyncPageGenerator(paginationFunction);
   }
 

@@ -33,7 +33,7 @@ export class StorePaginationContext<Entity extends AnyEntity> {
     contextId: string,
 
     // For requesting the pages
-    paginationFunction: PaginationFunction<Entity, any>,
+    paginationFunction: PaginationFunction<Entity>,
 
     // Dispatch an action meant for the PaginationReducer
     dispatch: (action: PaginationActionT) => void,

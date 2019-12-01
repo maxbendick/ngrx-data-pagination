@@ -4,15 +4,13 @@ import { Observable } from 'rxjs';
 import { Hero } from '../models/hero';
 import { HeroPaginationFactory } from '../services/hero-pagination-factory.service';
 
-type HeroPaginationState = number;
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  pagination: Pagination<Hero, HeroPaginationState>;
+  pagination: Pagination<Hero>;
   page$: Observable<Hero[]>;
 
   demoCodeLink =

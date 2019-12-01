@@ -15,7 +15,7 @@ export interface Page<Entity, State> {
   done: boolean;
 }
 
-export type PaginationFunction<Entity, State> = (
+export type PaginationFunction<Entity, State = any> = (
   prevState?: State,
 ) => Promise<Page<Entity, State>>;
 
