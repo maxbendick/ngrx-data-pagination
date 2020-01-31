@@ -37,8 +37,16 @@ Page:
 
 <br>
 
-<button (click)="prevPage()">&larr; Prev Page</button>
-<button (click)="nextPage()">Next Page &rarr;</button>
+<button
+  (click)="prevPage()"
+  [disabled]="pagination.selectors$.onFirstPage | async">
+  &larr; Prev Page
+</button>
+<button
+  (click)="nextPage()"
+  [disabled]="pagination.selectors$.onFinalPage | async">
+  Next Page &rarr;
+</button>
 
 <br><br><hr><br>
 

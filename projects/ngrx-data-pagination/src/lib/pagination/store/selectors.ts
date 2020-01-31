@@ -1,6 +1,14 @@
 import { EntityId } from '../entity';
 import { PaginationContextState } from './state';
 
+const finalPageIndex = ({ done, pages }: PaginationContextState): number => {
+  if (!done || !pages || !pages.length) {
+    return null;
+  }
+
+  return pages.length - 1;
+};
+
 export const contextSelectors = {
   currentPageIds: ({
     pages,
@@ -22,7 +30,19 @@ export const contextSelectors = {
     loadingNewPage,
   pageNumber: ({ currentPage }: PaginationContextState): number =>
     currentPage >= 0 ? currentPage : null,
-  done: ({ done }) => done,
+  done: ({ done }: PaginationContextState) => done,
+  finalPageIndex,
+  onFirstPage: ({ currentPage }: PaginationContextState) => currentPage === 0,
+  onFinalPage: (state: PaginationContextState) => {
+    const { currentPage } = state;
+    const finalIndex = finalPageIndex(state);
+
+    if (typeof finalIndex !== 'number' || typeof currentPage !== 'number') {
+      return false;
+    }
+
+    return currentPage === finalIndex;
+  },
 };
 
 export type ContextSelectors = typeof contextSelectors;

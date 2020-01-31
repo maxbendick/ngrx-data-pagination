@@ -53,6 +53,10 @@ button:active:hover {
   color: #EEE;
 }
 
+button:disabled {
+  cursor: default;
+}
+
 hr {
   border-color: #666;
 }
