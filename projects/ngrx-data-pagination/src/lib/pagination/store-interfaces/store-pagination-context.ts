@@ -83,10 +83,16 @@ export class StorePaginationContext<Entity extends AnyEntity> {
       throw new Error('bad page in getNextPageP');
     }
 
-    this.dispatchers.GetNextPageSuccess(
-      page.map(({ id }) => id),
-      this.pageIterator.done,
-    );
+    const entityIds = page.map(({ id }) => id);
+
+    if (!entityIds.length) {
+      this.dispatchers.GetNextPageEmpty();
+    } else {
+      this.dispatchers.GetNextPageSuccess(
+        entityIds,
+        this.pageIterator.done,
+      );
+    }
 
     return page;
   }

@@ -1,6 +1,7 @@
 import {
   GetNextPage,
   GetNextPageSuccess,
+  GetNextPageEmpty,
   NextPage,
   PrevPage,
   ResetPaginationState,
@@ -49,6 +50,52 @@ describe('paginationContextReducer', () => {
       ...defaultPaginationContextState,
       pages: [[0, 1, 2]],
       currentPage: 0,
+    });
+  });
+
+  it('GetNextPageEmptyBeforeFirstPage', () => {
+    const initialState: PaginationContextState = {
+      ...defaultPaginationContextState,
+    };
+
+    const state = paginationContextReducer(
+      initialState,
+      new GetNextPage('a context id'),
+    );
+
+    const action = new GetNextPageEmpty('a context id');
+
+    const newState = paginationContextReducer(state, action);
+
+    expect(newState).toEqual({
+      ...defaultPaginationContextState,
+      pages: [[]],
+      currentPage: 0,
+      done: true,
+    });
+  });
+
+  it('GetNextPageEmptyAfterFirstPage', () => {
+    const initialState: PaginationContextState = {
+      ...defaultPaginationContextState,
+      pages: [[0, 1, 2]],
+      currentPage: 0,
+    };
+
+    const state = paginationContextReducer(
+      initialState,
+      new GetNextPage('a context id'),
+    );
+
+    const action = new GetNextPageEmpty('a context id');
+
+    const newState = paginationContextReducer(state, action);
+
+    expect(newState).toEqual({
+      ...defaultPaginationContextState,
+      pages: [[0, 1, 2]],
+      currentPage: 0,
+      done: true,
     });
   });
 
