@@ -56,7 +56,6 @@ export const makeActionCreators = (contextId: string) => ({
   GetNextPage: () => new GetNextPage(contextId),
   GetNextPageSuccess: (entityIds: EntityId[], done: boolean) =>
     new GetNextPageSuccess(contextId, entityIds, done),
-  GetPrevPage: () => new PrevPage(contextId),
   PrevPage: () => new PrevPage(contextId),
   NextPage: () => new NextPage(contextId),
 });
