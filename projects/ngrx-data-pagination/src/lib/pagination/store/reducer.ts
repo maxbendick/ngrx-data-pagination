@@ -34,6 +34,19 @@ export function paginationContextReducer(
         progressionCancelled: false,
       };
 
+    case T.GET_NEXT_PAGE_EMPTY:
+      const isFirstFetchedPage = (state.pages.length === 0);
+      return {
+        ...state,
+        loadingNewPage: false,
+        pages: isFirstFetchedPage ? [[]] : [...state.pages],
+        currentPage: state.progressionCancelled && !isFirstFetchedPage
+          ? state.currentPage
+          : state.currentPage + 1,
+        done: true,
+        progressionCancelled: false,
+      };
+
     case T.PREV_PAGE:
       return {
         ...state,

@@ -4,6 +4,7 @@ export enum PaginationActionType {
   RESET_PAGINATION_STATE = '[mb-Pagination] Reset Pagination State',
   GET_NEXT_PAGE = '[mb-Pagination] Get Next Page',
   GET_NEXT_PAGE_SUCCESS = '[mb-Pagination] Get Next Page Success',
+  GET_NEXT_PAGE_EMPTY = '[mb-Pagination] Get Next Page Empty',
   PREV_PAGE = '[mb-Pagination] Prev Page',
   NEXT_PAGE = '[mb-Pagination] Next Page',
 }
@@ -35,6 +36,12 @@ export class GetNextPageSuccess implements PaginationActionT {
     public done: boolean,
   ) {}
 }
+export class GetNextPageEmpty implements PaginationActionT {
+  readonly type = T.GET_NEXT_PAGE_EMPTY;
+  constructor(
+    public contextId: string
+  ) {}
+}
 export class PrevPage implements PaginationActionT {
   readonly type = T.PREV_PAGE;
   constructor(public contextId: string) {}
@@ -48,6 +55,7 @@ export type PaginationAction =
   | ResetPaginationState
   | GetNextPage
   | GetNextPageSuccess
+  | GetNextPageEmpty
   | PrevPage
   | NextPage;
 
@@ -56,7 +64,7 @@ export const makeActionCreators = (contextId: string) => ({
   GetNextPage: () => new GetNextPage(contextId),
   GetNextPageSuccess: (entityIds: EntityId[], done: boolean) =>
     new GetNextPageSuccess(contextId, entityIds, done),
-  GetPrevPage: () => new PrevPage(contextId),
+  GetNextPageEmpty: () => new GetNextPageEmpty(contextId),
   PrevPage: () => new PrevPage(contextId),
   NextPage: () => new NextPage(contextId),
 });
@@ -72,6 +80,7 @@ export const makeDispatchers = (
     GetNextPage: () => dispatch(actionCreators.GetNextPage()),
     GetNextPageSuccess: (entityIds: EntityId[], done: boolean) =>
       dispatch(actionCreators.GetNextPageSuccess(entityIds, done)),
+    GetNextPageEmpty: () => dispatch(actionCreators.GetNextPageEmpty()),
     PrevPage: () => dispatch(actionCreators.PrevPage()),
     NextPage: () => dispatch(actionCreators.NextPage()),
   };
