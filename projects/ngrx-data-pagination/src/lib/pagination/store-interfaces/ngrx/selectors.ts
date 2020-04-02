@@ -89,7 +89,12 @@ const advancedPaginationSelectors = <Entity>(
         if (!ids || !entityMap) {
           return null;
         }
-        return ids.map(id => entityMap[id]);
+        return ids.reduce((a, id) => {
+          if (id in entityMap) {
+            a.push(entityMap[id]);
+          }
+          return a;
+        }, []);
       },
     ),
   };
