@@ -1,4 +1,4 @@
-import { EntityCollectionServiceBase } from '@ngrx/data';
+import { EntityCollectionServiceBase, EntityOp } from '@ngrx/data';
 import { Action, select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AnyEntity } from '../../entity';
@@ -33,8 +33,13 @@ export class Pagination<Entity extends AnyEntity, NextPageState = any> {
   ) {
     const dispatch = (action: Action) => store.dispatch(action);
 
-    const onReceivePage = (page: Entity[]) =>
-      addToCache ? this.entityService.upsertManyInCache(page) : null;
+    const onReceivePage = (page: Entity[]): void => {
+      if (!addToCache) {
+        return;
+      }
+      this.entityService.upsertManyInCache(page);
+      this.entityService.createAndDispatch(EntityOp.SAVE_UPSERT_MANY_SUCCESS, page);
+    };
 
     const paginationState$ = store.pipe(
       select(ngrxDataPaginationStoreKey),
