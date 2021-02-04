@@ -33,6 +33,14 @@ Page:
     <td>Done</td>
     <td>{{ pagination.selectors$.done | async | json }}</td>
   </tr>
+  <tr>
+    <td>All page IDs</td>
+    <td>
+      <div class="all-page-ids">
+        {{ pagination.selectors$.allPageIds | async | json }}
+      </div>
+    </td>
+  </tr>
 </table>
 
 <br>
@@ -46,6 +54,12 @@ Page:
   (click)="nextPage()"
   [disabled]="pagination.selectors$.onFinalPage | async">
   Next Page &rarr;
+</button>
+
+<br><br>
+<button
+  (click)="loadAllPages()">
+  Load All Pages (currently uncancellable)
 </button>
 
 <br><br><hr><br>

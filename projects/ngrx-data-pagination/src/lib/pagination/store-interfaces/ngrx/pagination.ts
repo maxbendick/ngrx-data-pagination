@@ -1,6 +1,7 @@
 import { EntityCollectionServiceBase, EntityOp } from '@ngrx/data';
 import { Action, select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
 import { AnyEntity } from '../../entity';
 import {
   ObservablePaginationFunction,
@@ -69,5 +70,43 @@ export class Pagination<Entity extends AnyEntity, NextPageState = any> {
 
   prevPage(): void {
     return this.storePaginationContext.prevPage();
+  }
+
+  /** Not yet cancellable! Use with caution. */
+  _loadAllPages(): Observable<unknown> {
+    return from(this._loadAllPagesP()).pipe(take(1));
+  }
+
+  private async _loadAllPagesP() {
+    // wait until not loading
+    await this.selectors$.nextPageLoading
+      .pipe(
+        filter(loading => !loading),
+        take(1),
+      )
+      .toPromise();
+
+    // start the next-page request
+    this.nextPage();
+
+    // wait until not loading, again
+    await this.selectors$.nextPageLoading
+      .pipe(
+        filter(loading => !loading),
+        take(1),
+      )
+      .toPromise();
+
+    const done = await this.selectors$.done
+      .pipe(take(1))
+      .toPromise();
+
+    if (done) {
+      // done case: let the whole function return
+      return;
+    }
+
+    // recursive case: not done, so recurse
+    return this._loadAllPages();
   }
 }
