@@ -32,4 +32,9 @@ export class AppComponent implements OnInit {
   prevPage() {
     this.pagination.prevPage();
   }
+
+  loadAllPages() {
+    // Don't recommend because it's uncancellable!
+    this.pagination._loadAllPages();
+  }
 }

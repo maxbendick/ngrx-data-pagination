@@ -14,6 +14,7 @@ import { defaultStoreKey } from './default-store-key';
 // These selections require knowledge of the entity cache
 interface AdvancedSelections<Entity> {
   page: Entity[] | null;
+  all: Entity[] | null;
 }
 
 export type BasicNgrxPaginationSelectors = {
@@ -95,6 +96,16 @@ const advancedPaginationSelectors = <Entity>(
           }
           return a;
         }, []);
+      },
+    ),
+    all: createSelector(
+      basicPaginationSelectors.allIds,
+      selectEntityMap,
+      (allIds, entityMap) => {
+        if (!allIds || !entityMap) {
+          return null;
+        }
+        return allIds.map(id => entityMap[id]);
       },
     ),
   };

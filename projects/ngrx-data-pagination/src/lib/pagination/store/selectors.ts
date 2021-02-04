@@ -9,11 +9,15 @@ const finalPageIndex = ({ done, pages }: PaginationContextState): number => {
   return pages.length - 1;
 };
 
+const flatten = <A>(arrays: A[][]): A[] => arrays.reduce((result, as) => result.concat(as))
+
 export const contextSelectors = {
   currentPageIds: ({
     pages,
     currentPage,
   }: PaginationContextState): EntityId[] => (pages ? pages[currentPage] : null),
+  allIds: ({ pages }: PaginationContextState): EntityId[] => flatten(pages),
+  allPageIds: ({ pages }: PaginationContextState): EntityId[][] => pages,
   nextPageLoaded: ({ pages, currentPage }: PaginationContextState): boolean =>
     !!pages[currentPage + 1],
   nextPageLoading: ({

@@ -60,3 +60,8 @@ button:disabled {
 hr {
   border-color: #666;
 }
+
+.all-page-ids {
+  max-width: 400px;
+  font-size: 0.5em;
+}
