@@ -25,11 +25,11 @@
     "@ngrx/store": "^8.5.1",
     "@ngrx/store-devtools": "^8.5.1",
     "rxjs": "~6.6.7",
-    "tslib": "^1.10.0",
+    "tslib": "^2.5.0",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.901.15",
+    "@angular-devkit/build-angular": "~12.2.18",
     "@angular-devkit/build-ng-packagr": "~0.901.15",
     "@angular/cli": "~9.1.15",
     "@angular/compiler-cli": "~12.2.17",
@@ -45,7 +45,7 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
-    "ng-packagr": "^9.0.0",
+    "ng-packagr": "^12.2.7",
     "prettier": "^1.19.1",
     "protractor": "~7.0.0",
     "ts-node": "~7.0.0",
