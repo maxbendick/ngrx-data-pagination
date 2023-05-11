@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.801.3",
-    "@angular-devkit/build-ng-packagr": "~0.801.3",
+    "@angular-devkit/build-ng-packagr": "~0.1002.4",
     "@angular/cli": "~8.1.1",
     "@angular/compiler-cli": "~8.1.1",
     "@angular/language-service": "~8.1.1",
@@ -49,9 +49,9 @@
     "prettier": "^1.19.1",
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
-    "tsickle": "^0.35.0",
+    "tsickle": "^0.39.1",
     "tslint": "~5.15.0",
-    "typescript": "~3.4.3"
+    "typescript": "~3.9.10"
   },
   "prettier": {
     "singleQuote": true,
