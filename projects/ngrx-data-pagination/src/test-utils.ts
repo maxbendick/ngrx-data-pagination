@@ -1,2 +1,2 @@
 export const waitMs = (timeMs: number) =>
-  new Promise(resolve => setTimeout(() => resolve(), timeMs));
+  new Promise<void>(resolve => setTimeout(() => resolve(), timeMs));
