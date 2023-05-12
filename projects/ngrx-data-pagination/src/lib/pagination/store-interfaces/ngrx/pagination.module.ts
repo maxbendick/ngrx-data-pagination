@@ -38,7 +38,7 @@ export class PaginationModule {
   /**
    * `storeKey` doesn't actually work yet`
    */
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<PaginationModule> {
     return {
       ngModule: PaginationModule,
       providers: [
