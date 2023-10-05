@@ -15,7 +15,7 @@ Run `ng build ngrx-data-pagination` to build the project. The build artifacts wi
 
 ## Publishing
 
-After building your library with `ng build ngrx-data-pagination`, go to the dist folder `cd dist/ngrx-data-pagination`
+After building your library with `ng build ngrx-data-pagination --configuration prod`, go to the dist folder `cd dist/ngrx-data-pagination`
 and run `npm publish`.
 
 ## Running unit tests
