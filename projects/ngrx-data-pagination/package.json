@@ -1,6 +1,6 @@
 {
   "name": "ngrx-data-pagination",
-  "version": "0.2.0-alpha",
+  "version": "0.2.0",
   "peerDependencies": {
     "@angular/common": "^13.0.0",
     "@angular/core": "^13.0.0",
