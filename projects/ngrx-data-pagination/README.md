@@ -35,9 +35,4 @@ the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/READ
 | `0.1.0`         | `^12.0.0`       | Dependency upgrades |
 | `0.2.0`         | `^13.0.0`       | Dependency upgrades |
 
-[//]: # (|                |               |       |)
-
-[//]: # (|                |               |       |)
-
-[//]: # (|                |               |       |)
 
