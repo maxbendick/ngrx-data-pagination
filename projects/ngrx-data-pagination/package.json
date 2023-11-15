@@ -1,11 +1,11 @@
 {
   "name": "ngrx-data-pagination",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "peerDependencies": {
-    "@angular/common": "^14.0.0",
-    "@angular/core": "^14.0.0",
-    "@ngrx/data": "^14.0.0",
-    "@ngrx/store": "^14.0.0"
+    "@angular/common": "^15.0.0",
+    "@angular/core": "^15.0.0",
+    "@ngrx/data": "^15.0.0",
+    "@ngrx/store": "^15.0.0"
   },
   "prettier": {
     "singleQuote": true,
