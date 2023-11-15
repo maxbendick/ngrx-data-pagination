@@ -11,11 +11,11 @@ use `ng generate directive|pipe|service|class|guard|interface|enum|module --proj
 
 ## Build
 
-Run `ng build ngrx-data-pagination` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `npm run build` or `ng build ngrx-data-pagination` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 ## Publishing
 
-After building your library with `ng build ngrx-data-pagination --configuration prod`, go to the dist folder `cd dist/ngrx-data-pagination`
+After building your library with `npm run build:prod`, go to the dist folder `cd dist/ngrx-data-pagination`
 and run `npm publish`.
 
 ## Running unit tests
@@ -34,5 +34,6 @@ the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/READ
 | `0.0.13`        | `^8.0.0`        | Initial version     |
 | `0.1.0`         | `^12.0.0`       | Dependency upgrades |
 | `0.2.0`         | `^13.0.0`       | Dependency upgrades |
+| `0.3.0`         | `^14.0.0`       | Dependency upgrades |
 
 
